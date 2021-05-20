@@ -1,6 +1,14 @@
 :root {
-  --white: #ffffff;
-  --black: #000000;
+  --white: #e8e8e8;
+  --grey: #cecece;
+  --black: #222222;
+  --yellow: #cfa231;
+
+  --light-green: #90ee90;
+}
+
+* {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 body {
@@ -10,7 +18,12 @@ body {
 
   width: 100vw;
   height: 100vh;
-  background: lightgreen;
+  background: var(--white);
+}
+
+::selection {
+  color: var(--white);
+  background-color: var(--yellow);
 }
 
 h1,

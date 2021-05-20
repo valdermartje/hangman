@@ -1,46 +1,36 @@
-function createButton(buttonName, buttonClass, positionInBody, buttonFunction) {
-
-    const button = document.createElement("BUTTON");
-
-    button.innerHTML = buttonName;
-    button.classList.add(buttonClass || "default");
-    button.addEventListener("click", buttonFunction);
-
-    if (positionInBody) {
-
-        positionInBody.appendChild(button);
-    } else {
-        console.error("There is no position specified in the 'positionInBody' parameter of the createButton() function");
-        throw new Error("There is no position specified in the 'positionInBody' parameter of the createButton() function");
-    }
+function Button() {
+  this.name;
+  this.className;
+  this.position;
+  this.functionality;
+  this.disabled = false;
 }
 
-/**
- * function Button() {
+Button.prototype.setName = (name) => {
+  this.name = name;
+};
 
-    const button = document.createElement("BUTTON");    
-}
+// Button.prototype.isDisabled = (disabled) => {
+//   this.disabled = disabled;
+// };
 
-Button.prototype.setButtonName = function(buttonName) {
-    button.innerHTML = buttonName;
-}
+Button.prototype.setPositionInBody = (positionInBody = document.body) => {
+  this.position = positionInBody;
+};
 
-Button.prototype.setButtonClass = function(buttonClass) {
-    button.classList.add(buttonClass || "default");
-}
+Button.prototype.setFunction = (buttonFunction) => {
+  this.functionality = buttonFunction;
+};
 
-Button.prototype.setPositionInBody = function(positionInBody) {
+Button.prototype.createButton = (buttonFunction) => {
+  const button = document.createElement("BUTTON");
+  button.innerHTML = this.name;
+  button.classList.add(this.className || "default");
+  button.isDisabled = this.disabled;
 
-    if (positionInBody) {
+  button.addEventListener("click", () => {
+    this.functionality();
+  });
 
-        positionInBody.appendChild(button);
-    } else {
-        console.error("There is no position specified in the 'positionInBody' parameter of the createButton() function");
-        throw new Error("There is no position specified in the 'positionInBody' parameter of the createButton() function");
-    }
-}
-
-Button.prototype.setButtonFunction = function() {
-    button.addEventListener("click", buttonFunction);
-}
- */
+  this.position.appendChild(button);
+};
