@@ -1,3 +1,8 @@
+:root {
+  --white: #ffffff;
+  --black: #000000;
+}
+
 body {
   position: relative;
   margin: 0;
@@ -5,4 +10,33 @@ body {
 
   width: 100vw;
   height: 100vh;
+  background: lightgreen;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+}
+
+a,
+p,
+span,
+label,
+input {
+}
+
+button {
+  padding: 20px 30px;
+  /* color: var(--white); */
+  /* background-color: var(--black);
+  border: 2px solid var(--black); */
+}
+
+.container {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
 }
