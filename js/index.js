@@ -161,7 +161,6 @@
     characterHTMLElement.innerHTML = character;
 
     characterHTMLElement.addEventListener("click", () => {
-
         chosenCharacters.push(character);
         setLessLives();
         searchCharacterPosition();
@@ -173,7 +172,7 @@
   const createChooseCharacterField = randomWordToQuess => {
 
     for (let count = 0; count < randomWordToQuess.length; count++) {
-      characterToQuessSection.innerHTML += `<div class="character-to-quess"><p>${randomWordToQuess[count]}</p></div>`;
+      characterToQuessSection.innerHTML += `<div class="character-to-quess"><p data-is-solved="false">${randomWordToQuess[count]}</p></div>`;
     }
   }
 
@@ -188,47 +187,34 @@
     randomWordToQuess =  WORDS_TO_QUESS[randomChosenWord];
   };
 
-  const searchCharacterInRandomWord = (randomWordToQuess, lastChosenCharacter) => {
-
-    randomWordToQuess = randomWordToQuess.toLowerCase();
-    lastChosenCharacter = lastChosenCharacter.toLowerCase();
-    
-    return (randomWordToQuess.includes(lastChosenCharacter));  
-  }
-
   const searchCharacterPosition = () => {
 
     const quessCharacters = document.querySelectorAll(".character-to-quess p");
+    const quessCharactersIsSolved = document.querySelectorAll('.character-to-quess p[data-is-solved="true"]');
     const characterElements = document.querySelectorAll(".character");
 
     quessCharacters.forEach(element => {
 
-      if(element.innerHTML === chosenCharacters[chosenCharacters.length - 1].toLowerCase()) {
+      if (element.innerHTML.toLowerCase() === chosenCharacters[chosenCharacters.length - 1].toLowerCase()) {
       
         element.style.opacity = "1";
         element.dataset.isSolved = "true";
-      } 
-      // else {
-      //   setLessLives();
-      // }
-
-      // IF A CHARACTER IS QUESSED
-      if (element.dataset.isSolved) {
-
-        count = count + 1;
       }
-
-      // THIS IS THE VICTORY
-      if (count === randomWordToQuess.length) {
       
-        // characterElements.forEach(character => {
-        //   removeChooseCharacterField();
-        //   character.style.display = "none";
-        //   livesElement.innerHTML = "";
-        // });
-      }
     });
-  
+
+    // THIS IS THE VICTORY
+    if (quessCharactersIsSolved.length === randomWordToQuess.length) {
+    
+      console.log("FINISHED");
+      livesElement.innerHTML = "You have quessed the word my Legend 😜😝"
+
+      characterElements.forEach(character => {
+        character.style.display = "none";
+        livesElement.innerHTML = "";
+      });
+    }
+
     characterElements.forEach(character => {
 
       if (character.innerHTML.toLowerCase() === chosenCharacters[chosenCharacters.length - 1].toLowerCase()) {
@@ -243,26 +229,39 @@
     lives = 10;
   }
 
+
+  // TODO: make lives less when it doesn't contain in a random word
   const setLessLives = () => {
-    console.log(lives);
-    lives = lives - 1; 
-  }
-  
-  const showLives = () => {
+
+    const characterElements = document.querySelectorAll(".character");
+
     livesElement.innerHTML = `Lives: ${lives}`;
+
+    console.log(lives);
+        
+    if (lives === 0) {
+      
+      removeChooseCharacterField();
+      
+      characterElements.forEach(character => {
+        character.style.display = "none";
+        livesElement.innerHTML = "Out of lives 😫😪";
+      });
+    } 
+
+    lives--; 
   }
 
   window.addEventListener("load", () => {
 
     createButton(
-      "Start Game", 
+      ["Start Game", "Stop Game"], 
       "default-button", 
       container, 
       () => { 
         randomWord(),
         loadCharacters(),
         setLives();
-        showLives();
         createChooseCharacterField(randomWordToQuess)
       }
     );
