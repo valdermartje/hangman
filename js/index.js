@@ -1,3 +1,5 @@
+"use strict";
+
 (() => {
   // TODO: onderstaande topics doornemen
   // -----------------------------------
@@ -5,7 +7,7 @@
   // TODO: https://stackoverflow.com/questions/9039205/create-default-behavior-for-when-appendchild-is-called-on-an-object
   // TODO: https://www.programiz.com/javascript/prototype
 
-  const LETTERS_IN_ALFABET = [
+  const CHARACTERS_IN_ALFABET = [
     "A",
     "B",
     "C",
@@ -130,43 +132,139 @@
   ];
 
   const container = document.querySelector(".container");
-  const wordToQuess = document.querySelector(".word-to-quess");
-  const characters = document.querySelector(".characters");
+  const charactersElements = document.querySelector(".characters");
+  const characterToQuessSection = document.querySelector(".character-to-quess-section");
+  const livesElement = document.querySelector(".lives");
 
   let randomWordToQuess = null;
-  let lives = 10;
+  let count = 0;
+  let lives;
+  let chosenCharacters = [];
 
-  const loadWords = () => {
-    LETTERS_IN_ALFABET.forEach((letter) => {
-      createCharacters({
-        character: letter,
-        documentInBody: characters,
-      });
+  const loadCharacters = () => {
+    CHARACTERS_IN_ALFABET.forEach((character) => {
+      createCharacters(
+        character,
+        charactersElements,
+        chosenCharacters,
+        randomWordToQuess
+      );
     });
   };
 
-  const randomWord = (words) => {
-    const wordsCount = words.length;
+  const createCharacters = (character, documentInBody = document.body, chosenCharacters) => {
 
-    const randomChosenWord = Math.floor(Math.random() * wordsCount);
+    const characterHTMLElement = document.createElement("DIV");
 
-    randomWordToQuess = words[randomChosenWord];
+    characterHTMLElement.dataset.character = character;
+    characterHTMLElement.classList.add("character");
+    characterHTMLElement.innerHTML = character;
+
+    characterHTMLElement.addEventListener("click", () => {
+
+        chosenCharacters.push(character);
+        setLessLives();
+        searchCharacterPosition();
+    });
+
+    documentInBody.appendChild(characterHTMLElement);
+  }
+
+  const createChooseCharacterField = randomWordToQuess => {
+
+    for (let count = 0; count < randomWordToQuess.length; count++) {
+      characterToQuessSection.innerHTML += `<div class="character-to-quess"><p>${randomWordToQuess[count]}</p></div>`;
+    }
+  }
+
+  const removeChooseCharacterField = () => {
+    characterToQuessSection.innerHTML = "";
+  }
+
+  const randomWord = () => {
+
+    const randomChosenWord = Math.floor(Math.random() * WORDS_TO_QUESS.length);
+  
+    randomWordToQuess =  WORDS_TO_QUESS[randomChosenWord];
   };
 
-  const hide = (element) => {
-    element.style.display = "none";
-  };
+  const searchCharacterInRandomWord = (randomWordToQuess, lastChosenCharacter) => {
 
-  const show = (element) => {
-    element.style.display = "block";
-  };
+    randomWordToQuess = randomWordToQuess.toLowerCase();
+    lastChosenCharacter = lastChosenCharacter.toLowerCase();
+    
+    return (randomWordToQuess.includes(lastChosenCharacter));  
+  }
+
+  const searchCharacterPosition = () => {
+
+    const quessCharacters = document.querySelectorAll(".character-to-quess p");
+    const characterElements = document.querySelectorAll(".character");
+
+    quessCharacters.forEach(element => {
+
+      if(element.innerHTML === chosenCharacters[chosenCharacters.length - 1].toLowerCase()) {
+      
+        element.style.opacity = "1";
+        element.dataset.isSolved = "true";
+      } 
+      // else {
+      //   setLessLives();
+      // }
+
+      // IF A CHARACTER IS QUESSED
+      if (element.dataset.isSolved) {
+
+        count = count + 1;
+      }
+
+      // THIS IS THE VICTORY
+      if (count === randomWordToQuess.length) {
+      
+        // characterElements.forEach(character => {
+        //   removeChooseCharacterField();
+        //   character.style.display = "none";
+        //   livesElement.innerHTML = "";
+        // });
+      }
+    });
+  
+    characterElements.forEach(character => {
+
+      if (character.innerHTML.toLowerCase() === chosenCharacters[chosenCharacters.length - 1].toLowerCase()) {
+      
+        character.style.pointerEvents = "none";
+        character.style.backgroundColor = "grey";
+      }
+    });
+  }
+
+  const setLives = () => {
+    lives = 10;
+  }
+
+  const setLessLives = () => {
+    console.log(lives);
+    lives = lives - 1; 
+  }
+  
+  const showLives = () => {
+    livesElement.innerHTML = `Lives: ${lives}`;
+  }
 
   window.addEventListener("load", () => {
-    const button = new Button();
-    button.setName("Start Game");
-    button.setPositionInBody(container);
-    button.setFunction(loadWords);
-    // button.isDisabled(true);
-    button.createButton();
+
+    createButton(
+      "Start Game", 
+      "default-button", 
+      container, 
+      () => { 
+        randomWord(),
+        loadCharacters(),
+        setLives();
+        showLives();
+        createChooseCharacterField(randomWordToQuess)
+      }
+    );
   });
 })();

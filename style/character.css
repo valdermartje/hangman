@@ -1,0 +1,53 @@
+.character {
+  display: inline-block;
+  padding: 20px;
+  margin: 10px 10px 10px 0;
+  color: var(--white);
+  background-color: var(--yellow);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.character-to-quess-section {
+  display: block;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 100px 0;
+}
+
+.character-to-quess {
+  position: relative;
+  display: flex;
+  padding: 0 20px;
+  margin-right: 20px;
+  transition: all .25s ease-in-out;
+}
+
+.character-to-quess:last-of-type {
+  margin-right: 0px;
+}
+
+.character-to-quess p {
+  opacity: 0;
+}
+
+.character-to-quess p.visible {
+ opacity: 1; 
+}
+
+.character-to-quess::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: black;
+}
+
+.character-quessed {
+
+}

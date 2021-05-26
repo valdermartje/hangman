@@ -1,36 +1,18 @@
-function Button() {
-  this.name;
-  this.className;
-  this.position;
-  this.functionality;
-  this.disabled = false;
+const createButton = (setName, setClass = "default", setPositionInBody, setFunction) => {
+
+  const button = document.createElement("BUTTON");
+  button.innerHTML = setName;
+  button.classList.add(setClass);
+  
+  button.addEventListener("click", setFunction);
+  
+  setPositionInBody.appendChild(button);
 }
 
-Button.prototype.setName = (name) => {
-  this.name = name;
-};
-
-// Button.prototype.isDisabled = (disabled) => {
-//   this.disabled = disabled;
+// const hide = (element) => {
+//   element.style.display = "none";
 // };
 
-Button.prototype.setPositionInBody = (positionInBody = document.body) => {
-  this.position = positionInBody;
-};
-
-Button.prototype.setFunction = (buttonFunction) => {
-  this.functionality = buttonFunction;
-};
-
-Button.prototype.createButton = (buttonFunction) => {
-  const button = document.createElement("BUTTON");
-  button.innerHTML = this.name;
-  button.classList.add(this.className || "default");
-  button.isDisabled = this.disabled;
-
-  button.addEventListener("click", () => {
-    this.functionality();
-  });
-
-  this.position.appendChild(button);
-};
+// const show = (element) => {
+//   element.style.display = "block";
+// };
